@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+  ncat:
+    image: stephengpope/no-code-architects-toolkit:latest
+    env_file:
+      - .env
+    ports:
+      - "127.0.0.1:4000:8080"
+    volumes:
+      - storage:/var/www/html/storage/app
+      - logs:/var/www/html/storage/logs
+    depends_on:
+      - minio
+    restart: unless-stopped
+
+
+  minio:
+    image: quay.io/minio/minio:latest
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "127.0.0.1:9000:9000"
+      - "127.0.0.1:9001:9001"
+    restart: unless-stopped
+
+volumes:
+  storage:
+  logs:
+  minio_data:
