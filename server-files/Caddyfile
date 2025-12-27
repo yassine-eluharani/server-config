@@ -1,0 +1,31 @@
+prefix.domain.com {
+    reverse_proxy localhost:5678
+}
+
+prefix.domain.com {
+    reverse_proxy 127.0.0.1:4000
+}
+
+prefix.domain.com {
+  encode gzip
+
+  reverse_proxy 127.0.0.1:3000
+
+  header {
+    Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    X-Content-Type-Options "nosniff"
+    X-Frame-Options "DENY"
+    Referrer-Policy "no-referrer"
+  }
+  request_body {
+    max_size 10MB
+  }
+}
+
+prefix.domain.com {
+    reverse_proxy 127.0.0.1:9001
+}
+
+prefix.domain.com {
+    reverse_proxy 127.0.0.1:9000
+}
